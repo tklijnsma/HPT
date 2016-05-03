@@ -33,6 +33,9 @@ def main():
 
     makedir = os.getcwd()
 
+    if not os.path.isdir( 'Saved_tarballs' ): os.makedirs( 'Saved_tarballs' )
+    if not os.path.isdir( 'output_logs' ): os.makedirs( 'output_logs' )
+
     checkers = []
     for runname in runnames:
         # Instantiate StatusChecker class
