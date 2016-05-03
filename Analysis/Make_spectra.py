@@ -41,8 +41,10 @@ def main():
     # kt1_root_file = '../Run_gridpacks_and_shower/Saved_root_files/kt1_gg_H_quark-mass-effects/Showered.root'
     # analysis_level = 'SHOWERED'
 
-    kg1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kg1_gg_H.root'
-    kt1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kt1_gg_H_quark-mass-effects.root'
+    # kg1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kg1_gg_H.root'
+    # kt1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kt1_gg_H_quark-mass-effects.root'
+    kg1_root_file = '../Apply_flashgg/flashgg_kg1_gg_H.root'
+    kt1_root_file = '../Apply_flashgg/flashgg_kt1_gg_H_quark-mass-effects.root'
     analysis_level = 'CUTS'
 
     # Initialize

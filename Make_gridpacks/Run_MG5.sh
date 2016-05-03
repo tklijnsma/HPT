@@ -69,16 +69,14 @@ fi
 
 echo "------------------------------------------------------------------"
 echo "Starting a run using MadGraph5"
-echo "    RUNNAME   = $RUNNAME"
-echo "    RUNCARD   = $RUNCARD"
-echo "    PROCCARD  = $PROCCARD"
+echo "    RUNNAME    = $RUNNAME"
+echo "    RUNCARD    = $RUNCARD"
+echo "    PROCCARD   = $PROCCARD"
 
 if [ $EXTRAMODEL = true ]; then
     echo "    EXTRAMODEL = $(sed -e '/^[ ]*#/d' -e '/^$/d' $MODELCARD | cat )"
 fi
 echo
-
-return 1
 
 # # Go up to Make_gridpacks; test if genproductions is properly setup
 cd $MAKEDIR
@@ -92,16 +90,13 @@ source Set_genproductions.sh
 echo "Clearing files from previous run (if present) ..."
 cd $CMSSW_VERSION/src/genproductions/bin/Powheg
 rm -rf $RUNNAME
-rm -rf run_full_$RUNNAME.sh
-rm -rf run_full_RUNNAME.log
-rm -rf $CARDDIR.input
-rm -rf RUNNAME_$MODEL.tgz
-rm -rf runcmsgrid.sh
+rm -rf RUNNAME.log
 cd $MAKEDIR
 echo "    Done"
 
 # Copy necessary files to the proper directory
 cp input/$RUNNAME/$INPUTCARD $CMSSW_VERSION/src/genproductions/bin/Powheg
+cp -r input_MG5/
 
 cd $CMSSW_VERSION/src/genproductions/bin/Powheg
 
