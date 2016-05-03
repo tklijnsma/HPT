@@ -93,7 +93,7 @@ class StatusChecker:
         # Read the model from the MODEL.txt file
         try:
             with open( 'input/{0}/MODEL.txt'.format(self.runname), 'r' ) as MODEL_fp:
-                self.model = MODEL_fp.read()
+                self.model = MODEL_fp.read().strip()
         except IOError:
             print 'There is no MODEL.txt file in input/{0}/'.format(self.runname)
             return 1
@@ -148,7 +148,8 @@ class StatusChecker:
 
             # Give a bit more time
             if not self.tgz_exists:
-                print 'Tarball does not exist yet, but packing may be slow; waiting for 90 seconds...'
+                print 'Tarball {0} does not exist yet, but packing may be slow; waiting for 90 seconds...'.format(
+                    self.tgz_file )
                 sleep(90)
 
             # Look again if the tarball exists
