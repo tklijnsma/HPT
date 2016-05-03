@@ -19,7 +19,7 @@ RUNDIR="$(pwd)"
 # Check input arguments
 ########################################
 
-if [ $# -eq 0 ]; then
+if [ $# -eq 0 ] || [ $# -eq 1 ]; then
     echo "    No arguments supplied"
     echo "    Supply the name of one of the following files:"
     ls ../Make_gridpacks/Saved_tarballs
@@ -104,6 +104,8 @@ echo
 echo "Doing cmsRun Run_gridpack_cfg.py"
 cmsRun Run_gridpack_cfg.py
 echo
+
+sleep 5
 
 echo "Doing cmsRun Shower_cfg.py"
 cmsRun Shower_cfg.py
