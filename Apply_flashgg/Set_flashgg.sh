@@ -10,6 +10,8 @@ echo "    Entering $CMSSW_VERSION/src"
 cd $CMSSW_VERSION/src
 
 
+RECOMPILE=false
+
 # If "renew" flag is passed, delete existing flashgg
 if [ $# -eq 0 ]; then
     echo "    No arguments supplied"
@@ -17,7 +19,7 @@ elif [ "$1" = "renew" ] && [ -r flashgg ]; then
     echo "    Found existing flashgg directory; Deleting it and remaking"
     rm -rf flashgg
 elif [ "$1" = "recompile" ] && [ -r flashgg ]; then
-    RECOMPILE="TRUE"
+    RECOMPILE=true
 fi
 
 # Get the flashgg repo if necessary
@@ -27,7 +29,7 @@ else
     echo "    Setting up fresh flashgg from $GITREPO"
     git cms-init
     git clone $GITREPO
-    RECOMPILE="TRUE"
+    RECOMPILE=true
 fi
 
 # Setup script
@@ -37,7 +39,7 @@ source flashgg/setup.sh
 # Copy in necessary files
 cp ../../Scripts/DummyVertexProducer.cc flashgg/MicroAOD/plugins/
 
-if [ ! -z "$RECOMPILE" ]; then
+if [ $RECOMPILE = true ]; then
     # Compile
     echo "Compiling"
     scram b -j 9
