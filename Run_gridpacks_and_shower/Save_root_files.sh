@@ -9,4 +9,5 @@ fi
 DATESTAMP="$(date +'%m%d')"
 
 mkdir -p Saved_root_files/$DATESTAMP_$RUNNAME
-cp $RUNNAME/*.root Saved_root_files/$DATESTAMP_$RUNNAME/
+#cp $RUNNAME/*.root Saved_root_files/$DATESTAMP_$RUNNAME/
+mv $RUNNAME/*.root Saved_root_files/$DATESTAMP_$RUNNAME/
