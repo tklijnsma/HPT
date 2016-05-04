@@ -58,6 +58,7 @@ process.load("flashgg.MicroAOD.flashggGenPhotons_cfi")
 process.load("flashgg.MicroAOD.flashggGenPhotonsExtra_cfi")
 process.load("flashgg.MicroAOD.flashggGenDiPhotons_cfi")
 
+# T: These seem to be overwritten by the job options
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32( 1000 )
 
@@ -114,19 +115,19 @@ process.TFileService = cms.Service("TFileService",
 process.myGenDiPhotons = cms.EDFilter("GenDiPhotonSelector",
     cut = cms.string(
         '1.0'
-        #'&& mass > %1.2f '                                                ## mass cut
-        #'&& leadingPhoton.pt > %1.2f*mass'                             ## scaling pt cuts
-        #'&& subLeadingPhoton.pt > %1.2f*mass'                          ## 
-        #'&& leadingExtra.type == 1 && subLeadingExtra.type == 1'       ## select prompt photons
-        #'&& leadingExtra.genIso < 10. && subLeadingExtra.genIso < 10.' ## gen-level isolation
+        '&& mass > %1.2f '                                                ## mass cut
+        '&& leadingPhoton.pt > %1.2f*mass'                             ## scaling pt cuts
+        '&& subLeadingPhoton.pt > %1.2f*mass'                          ## 
+        '&& leadingExtra.type == 1 && subLeadingExtra.type == 1'       ## select prompt photons
+        '&& leadingExtra.genIso < 10. && subLeadingExtra.genIso < 10.' ## gen-level isolation
         '&& (abs(leadingPhoton.eta)    < 2.5    && abs(subLeadingPhoton.eta) < 2.5  )' ## eta acceptance
         '&& (abs(leadingPhoton.eta)    < 1.4442 || abs(leadingPhoton.eta)    > 1.566)' ## no EB-EE gap
         '&& (abs(subLeadingPhoton.eta) < 1.4442 || abs(subLeadingPhoton.eta) > 1.566)' ## 
-        # % (
-        #     customize.options.massCut,
-        #     #customize.options.ptLead,
-        #     #customize.options.ptSublead
-        #     )
+         % (
+             customize.options.massCut,
+             customize.options.ptLead,
+             customize.options.ptSublead
+             )
         ),
     src = cms.InputTag("flashggGenDiPhotons")
     )

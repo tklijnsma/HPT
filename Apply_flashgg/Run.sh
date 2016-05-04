@@ -23,13 +23,13 @@ TESTDIR=$CMSSW_VERSION/src/flashgg/MicroAOD/test/
 
 
 echo "Making the configuration using Scripts/Make_hgg_gen_analysis.py"
-python Scripts/Make_hgg_gen_analysis.py $RUNNAME > $TESTDIR/hgg_gen_analysis.py
+python Scripts/Make_hgg_gen_analysis.py $RUNNAME > $TESTDIR/cfg_$RUNNAME.py
 
 echo "Entering $TESTDIR"
 cd $TESTDIR
 
-echo "Starting the run"
-cmsRun hgg_gen_analysis.py
+echo "Starting the run: cmsRun cfg_$RUNNAME.py"
+cmsRun cfg_$RUNNAME.py
 
 cd $FLASHBASE
 
