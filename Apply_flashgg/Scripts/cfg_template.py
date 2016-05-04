@@ -30,9 +30,16 @@ customize.setDefault("maxEvents",-1)
 customize.setDefault("targetLumi",1.e+3)
 customize.options.setDefault(
     "inputFiles",
+    #"/store/user/musella/GluGluSpin0ToGG_W_0p014_M_750_TuneCUEP8M1_8TeV_pythia8/CMSSW_7_4_15-Private-GEN/160119_234019/0000/GluGluSpin0ToGammaGamma_W_0p014_M_750_TuneCUEP8M1_8TeV_pythia8_GEN_1.root",
 
-    # Which file to run over
-    '###INPUTROOTFILE',
+    #'file:/afs/cern.ch/work/t/tklijnsm/Production/Chain1_RunningGPs/Saved_root_files/kg1_7_6_3/HIG-RunIIWinter15GenOnly-00011.root',
+    #'file:/afs/cern.ch/work/t/tklijnsm/Production/Chain1_RunningGPs/Saved_root_files/kt1_7_6_3/HIG-RunIIWinter15GenOnly-00011.root',
+
+    #'file:/afs/cern.ch/work/t/tklijnsm/Production/Chain1_RunningGPs/Saved_root_files/kg1_74_28April/HIG-RunIIWinter15GenOnly-00011.root',
+    #'file:/afs/cern.ch/work/t/tklijnsm/Production/Chain1_RunningGPs/Saved_root_files/kt1_74_28April/HIG-RunIIWinter15GenOnly-00011.root',
+
+    'file:###INPUT'
+
      )
 
 import FWCore.ParameterSet.VarParsing as VarParsing
@@ -77,7 +84,7 @@ process.myGenDiPhotons = cms.EDFilter("GenDiPhotonSelector",
         '&& mass > %1.2f '                                                ## mass cut
         '&& leadingPhoton.pt > %1.2f*mass'                             ## scaling pt cuts
         '&& subLeadingPhoton.pt > %1.2f*mass'                          ## 
-        '&& leadingExtra.type == 1 && subLeadingExtra.type == 1'       ## select prompt photons
+        #'&& leadingExtra.type == 1 && subLeadingExtra.type == 1'       ## select prompt photons
         '&& leadingExtra.genIso < 10. && subLeadingExtra.genIso < 10.' ## gen-level isolation
         '&& (abs(leadingPhoton.eta)    < 2.5    && abs(subLeadingPhoton.eta) < 2.5  )' ## eta acceptance
         '&& (abs(leadingPhoton.eta)    < 1.4442 || abs(leadingPhoton.eta)    > 1.566)' ## no EB-EE gap
@@ -85,7 +92,7 @@ process.myGenDiPhotons = cms.EDFilter("GenDiPhotonSelector",
          % (
              customize.options.massCut,
              customize.options.ptLead,
-             customize.options.ptSublead,
+             customize.options.ptSublead
              )
         ),
     src = cms.InputTag("flashggGenDiPhotons")
