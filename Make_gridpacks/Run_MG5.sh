@@ -60,6 +60,7 @@ if [ ! -f "$MODELCARD" ]; then
     EXTRAMODEL=false
 else
     EXTRAMODEL=true
+    MODEL="$(sed -e '/^[ ]*#/d' -e '/^$/d' $MODELCARD | cat )"
 fi
 
 ########################################
@@ -74,7 +75,7 @@ echo "    RUNCARD    = $RUNCARD"
 echo "    PROCCARD   = $PROCCARD"
 
 if [ $EXTRAMODEL = true ]; then
-    echo "    EXTRAMODEL = $(sed -e '/^[ ]*#/d' -e '/^$/d' $MODELCARD | cat )"
+    echo "    EXTRAMODEL = $MODEL"
 fi
 echo
 
@@ -82,30 +83,43 @@ echo
 cd $MAKEDIR
 source Set_genproductions.sh
 
+# Set the external model dir (used in gridpack_generation.sh)
+export EXTERNALMODELDIR="$(pwd)/input_MG5/externalmodels/"
 
 ########################################
 # Clear up old files if they exist
 ########################################
 
+MG5DIR=$CMSSW_VERSION/src/genproductions/bin/MadGraph5_aMCatNLO
+
 echo "Clearing files from previous run (if present) ..."
-cd $CMSSW_VERSION/src/genproductions/bin/Powheg
+cd $MG5DIR
 rm -rf $RUNNAME
 rm -rf RUNNAME.log
 cd $MAKEDIR
 echo "    Done"
 
-# Copy necessary files to the proper directory
-cp input/$RUNNAME/$INPUTCARD $CMSSW_VERSION/src/genproductions/bin/Powheg
-cp -r input_MG5/
 
-cd $CMSSW_VERSION/src/genproductions/bin/Powheg
+echo "Entering $MG5DIR"
+cd $MG5DIR
+
+# Make a temporary card dir in the MG5 directory
+#   This should be a relative directory
+TEMPCARDDIR="tempcards/$RUNNAME"
+mkdir -p $TEMPCARDDIR
+
+# Copy necessary files to the proper directory
+cp $MAKEDIR/input_MG5/$RUNNAME/* $TEMPCARDDIR/
+
+ls $TEMPCARDDIR
 
 echo
 echo "STARTING ACTUAL GRIDPACK GENERATION"
-echo "python $PWGPY -p f -i $INPUTCARD -m $MODEL -f $RUNNAME -n 77"
+echo "./gridpack_generation.sh $RUNNAME $TEMPCARDDIR 1nd"
 echo
 
-python $PWGPY -p f -i $INPUTCARD -m $MODEL -f $RUNNAME -n 5000
-
+./gridpack_generation.sh $RUNNAME $TEMPCARDDIR 1nd
+#./gridpack_generation.sh $RUNNAME cards/production/13TeV/higgs/ggh012j_5f_LO_FXFX_125/ 2nd
+#python $PWGPY -p f -i $INPUTCARD -m $MODEL -f $RUNNAME -n 5000
 
 cd $STARTDIR
