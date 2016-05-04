@@ -105,7 +105,7 @@ process.source = cms.Source(
         )
 )
 process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string("###OUTPUTROOTFILE.root")
+                                   fileName = cms.string("###OUTPUTROOTFILE")
 )
 
 
