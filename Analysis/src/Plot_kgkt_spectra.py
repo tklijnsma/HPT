@@ -87,7 +87,7 @@ def Draw_both_normalized_spectra( spec ):
     #     data.SetBinContent( i_val+1, spec.data.values[i_val] )
 
     # Purely visual minimal data shift
-    data_shift = 2.0
+    data_shift = 3.0
 
     if not spec.data.err_up == []:
         data = ROOT.TGraphAsymmErrors(
@@ -128,8 +128,9 @@ def Draw_both_normalized_spectra( spec ):
     data.SetMarkerColor(1)
 
     # Set y-axis limit
-    y_max = 1.5 * max( kt1.GetMaximum(), kg1.GetMaximum() )
+    y_max = 2.0 * max( kt1.GetMaximum(), kg1.GetMaximum() )
     kt1.SetMaximum( y_max )
+    kt1.SetMinimum( -1.0 )
 
     # ======================================
     # Some information text boxes

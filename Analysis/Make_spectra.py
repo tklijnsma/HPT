@@ -8,6 +8,7 @@ from Plot_kgkt_spectra import Draw_both_unnormalized_spectra
 from Plot_kgkt_spectra import Draw_both_normalized_spectra
 
 from Quadratic_fit import Quadratic_fit
+from Quadratic_fit import Plot_quadratic_fit
 
 import ROOT
 import argparse
@@ -49,8 +50,13 @@ def main():
 
     # kg1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kg1_gg_H.root'
     # kt1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kt1_gg_H_quark-mass-effects.root'
-    kg1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kg1_gg_H.root'
-    kt1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kt1_gg_H_quark-mass-effects.root'
+    
+    # kg1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kg1_gg_H.root'
+    # kt1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kt1_gg_H_quark-mass-effects.root'
+    
+    kg1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kg1_gg_H.root'
+    kt1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kt1_gg_H_quark-mass-effects.root'
+    
     analysis_level = 'CUTS'
 
     # Initialize
@@ -81,6 +87,7 @@ def main():
     Draw_both_normalized_spectra( spec )
 
     Quadratic_fit( spec )
+    Plot_quadratic_fit( spec )
 
 
 ########################################
