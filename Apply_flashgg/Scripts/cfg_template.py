@@ -80,7 +80,7 @@ process.TFileService = cms.Service("TFileService",
 #
 process.myGenDiPhotons = cms.EDFilter("GenDiPhotonSelector",
     cut = cms.string(
-        '1.0'
+        '1.0 > 0.0'
         '&& mass > %1.2f '                                                ## mass cut
         '&& leadingPhoton.pt > %1.2f*mass'                             ## scaling pt cuts
         '&& subLeadingPhoton.pt > %1.2f*mass'                          ## 
