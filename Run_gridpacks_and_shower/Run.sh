@@ -21,8 +21,9 @@ RUNDIR="$(pwd)"
 
 if [ $# -eq 0 ] || [ $# -eq 1 ]; then
     echo "    No arguments supplied"
-    echo "    Supply the name of one of the following files:"
+    echo "    1st argument: Supply the name of one of the following files:"
     ls ../Make_gridpacks/Saved_tarballs
+    echo "    2nd argument: Supply the desired number of events"
     return 1
 fi
 
