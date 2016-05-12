@@ -54,13 +54,42 @@ def main():
     # kg1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kg1_gg_H.root'
     # kt1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kt1_gg_H_quark-mass-effects.root'
     
-    kg1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kg1_gg_H.root'
-    kt1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kt1_gg_H_quark-mass-effects.root'
+    #kg1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kg1_gg_H.root'
+    #kg1_root_file = '../Apply_flashgg/Saved_root_files/9May_ren/flashgg_0509_kg1_ren_gg_H.root'
+    #kt1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kt1_gg_H_quark-mass-effects.root'
     
+    kg1_root_file = '../Apply_flashgg/Saved_root_files/9May_NoCuts/flashgg_0509_kg1_ren_gg_H.root'
+    kt1_root_file = '../Apply_flashgg/Saved_root_files/9May_NoCuts/flashgg_0508_kt1_gg_H_quark-mass-effects.root'    
+
     analysis_level = 'CUTS'
 
+
+
+    massCut = 100.
+    ptLeadCut = 1./3.
+    ptSubleadCut = 1./4.
+
+    # Currently only the mass cut
+    cuts = [
+
+        #'abs(mass-125.)<0.2'
+
+        'mass > {0}'.format(massCut),
+        
+        'leadPt > {0:.2f}*mass && subLeadPt > {1:.2f}*mass'.format(
+            ptLeadCut, ptSubleadCut ),
+        
+        'leadExtraGenIso < 10. && subLeadExtraGenIso < 10.',
+        
+        ( '(abs(leadEta)    < 2.5    && abs(subLeadEta) < 2.5  )'
+          '&& (abs(leadEta)    < 1.4442 || abs(leadEta)    > 1.566)'
+          '&& (abs(subLeadEta) < 1.4442 || abs(subLeadEta) > 1.566)'
+          ),
+
+        ]
+
     # Initialize
-    spec = Spectra_container( analysis_level )
+    spec = Spectra_container( analysis_level, cuts )
 
     spec.Set_data_spectrum(
         bins = [ 0, 15, 26, 43, 72, 125, 200 ],
@@ -84,10 +113,13 @@ def main():
     spec.kt1.Print_H()
 
     Draw_both_unnormalized_spectra( spec )
-    Draw_both_normalized_spectra( spec )
+    #Draw_both_normalized_spectra( spec )
 
     Quadratic_fit( spec )
     Plot_quadratic_fit( spec )
+
+    print spec.kt1.unnormalized_values
+    print spec.kg1.unnormalized_values
 
 
 ########################################

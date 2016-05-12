@@ -81,19 +81,20 @@ process.TFileService = cms.Service("TFileService",
 process.myGenDiPhotons = cms.EDFilter("GenDiPhotonSelector",
     cut = cms.string(
         '1.0 > 0.0'
-        '&& mass > %1.2f '                                                ## mass cut
-        '&& leadingPhoton.pt > %1.2f*mass'                             ## scaling pt cuts
-        '&& subLeadingPhoton.pt > %1.2f*mass'                          ## 
-        #'&& leadingExtra.type == 1 && subLeadingExtra.type == 1'       ## select prompt photons
-        '&& leadingExtra.genIso < 10. && subLeadingExtra.genIso < 10.' ## gen-level isolation
-        '&& (abs(leadingPhoton.eta)    < 2.5    && abs(subLeadingPhoton.eta) < 2.5  )' ## eta acceptance
-        '&& (abs(leadingPhoton.eta)    < 1.4442 || abs(leadingPhoton.eta)    > 1.566)' ## no EB-EE gap
-        '&& (abs(subLeadingPhoton.eta) < 1.4442 || abs(subLeadingPhoton.eta) > 1.566)' ## 
-         % (
-             customize.options.massCut,
-             customize.options.ptLead,
-             customize.options.ptSublead
-             )
+        '&& abs(mass-125.)<0.2 '                                                ## mass cut'
+        # '&& mass > %1.2f '                                                ## mass cut
+        # '&& leadingPhoton.pt > %1.2f*mass'                             ## scaling pt cuts
+        # '&& subLeadingPhoton.pt > %1.2f*mass'                          ## 
+        # #'&& leadingExtra.type == 1 && subLeadingExtra.type == 1'       ## select prompt photons
+        # '&& leadingExtra.genIso < 10. && subLeadingExtra.genIso < 10.' ## gen-level isolation
+        # '&& (abs(leadingPhoton.eta)    < 2.5    && abs(subLeadingPhoton.eta) < 2.5  )' ## eta acceptance
+        # '&& (abs(leadingPhoton.eta)    < 1.4442 || abs(leadingPhoton.eta)    > 1.566)' ## no EB-EE gap
+        # '&& (abs(subLeadingPhoton.eta) < 1.4442 || abs(subLeadingPhoton.eta) > 1.566)' ## 
+        #  % (
+        #      customize.options.massCut,
+        #      customize.options.ptLead,
+        #      customize.options.ptSublead
+        #      )
         ),
     src = cms.InputTag("flashggGenDiPhotons")
     )
@@ -108,20 +109,37 @@ process.genDiphotonDumper = genDiphotonDumper.clone(
     nameTemplate = cms.untracked.string("$PROCESS_$LABEL_$SUBCAT"),
     dumpTrees = cms.untracked.bool(True)
 )
+
 cfgTools.addCategories(process.genDiphotonDumper,
-                       [("all","1",0),  # category definition: (<name>,<selection>,<num_subcats>)
-                        ## ("EB","max(abs(leadingPhoton.eta),abs(subLeadingPhoton.eta))<1.4442",0),
-                        ## ("EE","1",0)
-                        ],
-                       variables=["mass","pt","rapidity",
-                                  "leadPt := leadingPhoton.pt",
-                                  "subeadPt := subLeadingPhoton.pt",
-                                  ## add more variables here
-                                  ],
-                       histograms=["genMass>>genmass(1500,0,15000)",
-                                   ## can directly draw 
-                                   ]
-                       )
+    [ ("all","1",0),  # category definition: (<name>,<selection>,<num_subcats>)
+                      ## ("EB","max(abs(leadingPhoton.eta),abs(subLeadingPhoton.eta))<1.4442",0),
+                      ## ("EE","1",0)
+        ],
+    variables=[
+        "mass",
+        "pt",
+        "rapidity",
+
+        "leadPt  := leadingPhoton.pt",
+        "leadEta := leadingPhoton.eta",
+        "leadPhi := leadingPhoton.phi",
+
+        "leadExtraType   := leadingExtra.type",
+        "leadExtraGenIso := leadingExtra.genIso",
+        
+        "subLeadPt  := subLeadingPhoton.pt",
+        "subLeadEta := subLeadingPhoton.eta",
+        "subLeadPhi := subLeadingPhoton.phi",
+
+        "subLeadExtraType   := subLeadingExtra.type",
+        "subLeadExtraGenIso := subLeadingExtra.genIso",
+
+        ],
+    histograms=[
+        "genMass>>genmass(1500,0,15000)",
+        ## can directly draw 
+        ]
+    )
 
 
 

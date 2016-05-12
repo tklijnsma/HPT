@@ -41,13 +41,15 @@ class Spectra_container:
     # ======================================
     # Initialization
 
-    def __init__( self, analysis_level = 'SHOWERED' ):
+    def __init__( self, analysis_level = 'SHOWERED', cuts = [] ):
         'Initialization'
 
         # Possibilities are currently 'SHOWERED' and 'CUTS'
         # These root files are structured differently, so they have to be read out differently
         self.analysis_level = analysis_level
 
+        # Cuts to be applied during drawing
+        self.cuts = cuts
 
         # Total fiducial cross section [fb] (from http://arxiv.org/pdf/1508.07819v2.pdf)
         self.total_XS = 32.2
@@ -156,14 +158,24 @@ class Spectrum:
         elif self.container.analysis_level == 'CUTS':
 
             # Enter the directory and create the histogram there
-            #root_fp.ls()
             root_fp.cd('genDiphotonDumper/trees')
 
+            # Create histogram in this directory
             H = ROOT.TH1F( Hname, Htitle, self.n_pt_bins, array( 'd', self.pt_bins ) )
 
+            # Define the tree
             tree  = ROOT.gDirectory.Get( 'ggH_all' )
 
-            tree.Draw( 'pt>>' + Hname )
+            # Build the selection string
+            #   Start with always true (1.0) and appends with "&& condition"
+            sel_str = '1.0'
+            for cut in self.container.cuts:
+                sel_str += '&& (' + cut + ')'
+
+            print '    Built the following selection string:'
+            print sel_str
+
+            tree.Draw( 'pt>>' + Hname, sel_str )
             
 
 
@@ -219,11 +231,15 @@ class Spectrum:
         self.values = [ self.normalization * i for i in self.unnormalized_values ]
 
 
-    def Print_H( self ):
+    def Print_H( self, out_filename = None ):
+
+        # Get filename from title if not specified
+        if not out_filename:
+            out_filename = self.H.GetTitle()
 
         self.container.c1.Clear()
         self.H.Draw()
-        self.container.c1.Print( self.H.GetTitle() + '.pdf', 'pdf' )
+        self.container.c1.Print( out_filename + '.pdf', 'pdf' )
 
 
 

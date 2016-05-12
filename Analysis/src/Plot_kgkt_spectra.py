@@ -7,22 +7,37 @@ import os
 from array import array
 
 
-def Draw_both_unnormalized_spectra( spec ):
+def Draw_both_unnormalized_spectra( spec,
+    out_filename = 'Both_unnormalized_spectra',
+    also_png = False,
+    ):
 
     ROOT.gStyle.SetOptStat(0)
 
     spec.c1.Clear()
 
+    spec.c1.SetLogy()
+
     # Convenience pointers
     kt1 = spec.kt1.H
     kg1 = spec.kg1.H
+
+    for i in range( spec.n_pt_bins ):
+
+        kt1.SetBinContent( i+1, kt1.GetBinContent(i+1) / kt1.GetXaxis().GetBinWidth(i+1) )
+        kg1.SetBinContent( i+1, kg1.GetBinContent(i+1) / kg1.GetXaxis().GetBinWidth(i+1) )
+
+        kt1.SetBinError( i+1, kt1.GetBinError(i+1) / kt1.GetXaxis().GetBinWidth(i+1) )
+        kg1.SetBinError( i+1, kg1.GetBinError(i+1) / kg1.GetXaxis().GetBinWidth(i+1) )
+
+
 
     kt1.Draw('LE1')
     kg1.Draw('LE1HISTSAME')
 
     kt1.SetTitle('Both p_{t} spectra (unnormalized)')
+    kt1.GetYaxis().SetTitle( '#Delta #sigma / #Delta p_{t} [AU]' )
     kt1.GetXaxis().SetTitle( 'p_{t} [GeV]' )
-    kt1.GetYaxis().SetTitle( 'Entries' )
     kt1.GetYaxis().SetTitleOffset(1.30)
 
 
@@ -58,7 +73,10 @@ def Draw_both_unnormalized_spectra( spec ):
     tl.DrawLatex( lx+nc, ly-nl, str(int(kg1.GetEntries())) )
 
 
-    spec.c1.Print( 'Both_unnormalized_spectra.pdf', '.pdf' )
+    spec.c1.Print( out_filename + '.pdf', '.pdf' )
+
+    if also_png:
+        spec.c1.Print( out_filename + '.png', '.png' )
 
     ROOT.gStyle.SetOptStat(1011)
 

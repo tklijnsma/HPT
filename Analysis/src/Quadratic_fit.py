@@ -51,6 +51,7 @@ def Plot_quadratic_fit( spec ):
     ROOT.gStyle.SetLabelSize( 0.100, 'xy')
 
     spec.c1.Clear()
+    spec.c1.SetLogy(0)
     spec.c1.SetGrid( 0, 0 )
     spec.c1.SetCanvasSize( 1000, 300 )
 
