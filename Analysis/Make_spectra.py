@@ -10,6 +10,8 @@ from Plot_kgkt_spectra import Draw_both_normalized_spectra
 from Quadratic_fit import Quadratic_fit
 from Quadratic_fit import Plot_quadratic_fit
 
+import kappa_elips
+
 import ROOT
 import argparse
 import os
@@ -44,25 +46,10 @@ def main():
     # ======================================
     # Set up spectrum class
 
-    # kg1_root_file = '../Run_gridpacks_and_shower/Saved_root_files/kg1_gg_H/Showered.root'
-    # kt1_root_file = '../Run_gridpacks_and_shower/Saved_root_files/kt1_gg_H_quark-mass-effects/Showered.root'
-    # analysis_level = 'SHOWERED'
-
-    # kg1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kg1_gg_H.root'
-    # kt1_root_file = '../Apply_flashgg/Saved_root_files/flashgg_kt1_gg_H_quark-mass-effects.root'
-    
-    # kg1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kg1_gg_H.root'
-    # kt1_root_file = '../Apply_flashgg/Saved_root_files/4May_2100Events/flashgg_kt1_gg_H_quark-mass-effects.root'
-    
-    #kg1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kg1_gg_H.root'
-    #kg1_root_file = '../Apply_flashgg/Saved_root_files/9May_ren/flashgg_0509_kg1_ren_gg_H.root'
-    #kt1_root_file = '../Apply_flashgg/Saved_root_files/8May_100k/flashgg_0508_kt1_gg_H_quark-mass-effects.root'
-    
-    kg1_root_file = '../Apply_flashgg/Saved_root_files/9May_NoCuts/flashgg_0509_kg1_ren_gg_H.root'
-    kt1_root_file = '../Apply_flashgg/Saved_root_files/9May_NoCuts/flashgg_0508_kt1_gg_H_quark-mass-effects.root'    
+    kg1_root_file = '../Apply_flashgg/Saved_root_files/9May/flashgg_0509_kg1_ren_gg_H.root'
+    kt1_root_file = '../Apply_flashgg/Saved_root_files/9May/flashgg_0508_kt1_gg_H_quark-mass-effects.root'    
 
     analysis_level = 'CUTS'
-
 
 
     massCut = 100.
@@ -113,13 +100,21 @@ def main():
     spec.kt1.Print_H()
 
     Draw_both_unnormalized_spectra( spec )
-    #Draw_both_normalized_spectra( spec )
+    Draw_both_normalized_spectra( spec )
 
     Quadratic_fit( spec )
     Plot_quadratic_fit( spec )
 
     print spec.kt1.unnormalized_values
     print spec.kg1.unnormalized_values
+
+
+
+    print '\n' + '#'*70
+    print 'Kappa plot\n'
+
+    spec.kappa_plot()
+
 
 
 ########################################

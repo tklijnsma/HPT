@@ -34,8 +34,13 @@ echo "Setting up CMSSW"
 
 # Set which arch and version to make
 #export SCRAM_ARCH=slc6_amd64_gcc491
+
+# These for the May results (can't recompile flashgg)
+# export SCRAM_ARCH=slc6_amd64_gcc493
+# export CMSSW_VERSION=CMSSW_7_6_3_patch2
 export SCRAM_ARCH=slc6_amd64_gcc493
-export CMSSW_VERSION=CMSSW_7_6_3_patch2
+export CMSSW_VERSION=CMSSW_8_0_8_patch1
+
 
 echo "    SCRAM_ARCH = $SCRAM_ARCH"
 echo "    CMSSW_VERSION = $CMSSW_VERSION"

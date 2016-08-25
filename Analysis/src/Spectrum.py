@@ -112,7 +112,7 @@ class Spectrum:
         self.values = values
         self.err_up = err_up
         self.err_down = err_down
-
+        self.Normalized_copy()
 
     def Set_values_from_root_file( self, root_file, Verbose = False ):
         self.root_file = root_file
@@ -209,6 +209,8 @@ class Spectrum:
         with open( 'H_' + self.name + '.pickle', 'wb' ) as pickle_fp:
             pickle.dump( H, pickle_fp )
 
+        self.Normalized_copy()
+
 
     def Set_values_from_pickle_file( self, pickle_file, Verbose = False ):
 
@@ -217,6 +219,9 @@ class Spectrum:
 
         # Read histogram into arrays
         self.Set_values_from_histogram()
+
+        self.Normalized_copy()
+
 
 
     def Set_values_from_histogram( self ):
@@ -229,6 +234,33 @@ class Spectrum:
         # Normlize w.r.t. total fiducial cross section
         self.normalization = self.container.total_XS / sum(self.unnormalized_values)
         self.values = [ self.normalization * i for i in self.unnormalized_values ]
+
+
+    def Normalized_copy( self ):
+
+        # Copy of values and errors
+
+        sum_values = sum(self.values)
+
+        self.norm_values = [ float(i)/sum_values for i in self.values ]
+
+        if hasattr( self, 'err_up' ):
+            self.norm_err_up = [ float(i)/sum_values for i in self.err_up ]
+        else:
+            self.norm_err_up = [ 0. for i in self.values ]
+
+        if hasattr( self, 'err_down' ):
+            self.norm_err_down = [ float(i)/sum_values for i in self.err_down ]
+        else:
+            self.norm_err_down = [ 0. for i in self.values ]
+
+
+        # Copy of the histogram
+        if hasattr( self, 'H' ):
+            self.norm_H = deepcopy( self.H )
+            self.norm_H.Sumw2()
+            self.norm_H.Scale( 1.0/self.norm_H.Integral() )
+
 
 
     def Print_H( self, out_filename = None ):

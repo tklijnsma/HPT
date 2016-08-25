@@ -29,6 +29,8 @@ else
     echo "    Setting up fresh flashgg from $GITREPO"
     git cms-init
     git clone $GITREPO
+    # git checkout 2d121446d4d7972ac0d0c43de03f11a0b8afe4c9
+    git checkout 63f87406b0c68300d3b9576e1e77ba1ddd89cf72
     RECOMPILE=true
 fi
 

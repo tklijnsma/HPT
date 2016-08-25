@@ -88,12 +88,15 @@ def Draw_both_normalized_spectra( spec ):
     spec.c1.Clear()
 
     # Convenience pointers
-    kt1 = spec.kt1.H
-    kg1 = spec.kg1.H
+    kt1 = spec.kt1.norm_H
+    kg1 = spec.kg1.norm_H
 
     # Normalizes
-    kt1.Scale( spec.kt1.normalization )
-    kg1.Scale( spec.kg1.normalization )
+    # kt1.Scale( spec.kt1.normalization )
+    # kg1.Scale( spec.kg1.normalization )
+    # kt1.Scale( kt1.Integral() )
+    # kg1.Scale( ktg.Integral() )
+
 
     # # Make data histogram
     # data = ROOT.TH1F( 'data', 'data',
@@ -105,23 +108,23 @@ def Draw_both_normalized_spectra( spec ):
     #     data.SetBinContent( i_val+1, spec.data.values[i_val] )
 
     # Purely visual minimal data shift
-    data_shift = 3.0
+    data_shift = 0.0
 
     if not spec.data.err_up == []:
         data = ROOT.TGraphAsymmErrors(
             spec.n_pt_bins,
             array( 'd', [ kt1.GetBinCenter(i+1)+data_shift for i in range(spec.n_pt_bins) ] ),
-            array( 'd', [ i for i in spec.data.values ] ),
+            array( 'd', [ i for i in spec.data.norm_values ] ),
             array( 'd', [ 0 for i in range(spec.n_pt_bins) ] ),
             array( 'd', [ 0 for i in range(spec.n_pt_bins) ] ),
-            array( 'd', [ -i for i in spec.data.err_down ] ),
-            array( 'd', spec.data.err_up ),
+            array( 'd', [ -i for i in spec.data.norm_err_down ] ),
+            array( 'd', spec.data.norm_err_up ),
             )
     else:
         data = ROOT.TGraphAsymmErrors(
             spec.n_pt_bins,
             array( 'd', [ kt1.GetBinCenter(i+1) for i in range(spec.n_pt_bins) ] ),
-            array( 'd', spec.data.values ),
+            array( 'd', spec.data.norm_values ),
             array( 'd', [ 0 for i in range(spec.n_pt_bins) ] ),
             array( 'd', [ 0 for i in range(spec.n_pt_bins) ] ),
             array( 'd', [ 0 for i in range(spec.n_pt_bins) ] ),
@@ -145,10 +148,19 @@ def Draw_both_normalized_spectra( spec ):
     #data.SetLineWidth(2)
     data.SetMarkerColor(1)
 
-    # Set y-axis limit
-    y_max = 2.0 * max( kt1.GetMaximum(), kg1.GetMaximum() )
+    # # Set y-axis limit
+    y_max = 1.1 * max(
+        [ val + err for val, err in zip( spec.kt1.norm_values, spec.kt1.norm_err_up ) ] +
+        [ val + err for val, err in zip( spec.kg1.norm_values, spec.kg1.norm_err_up ) ] +
+        [ val + err for val, err in zip( spec.data.norm_values, spec.data.norm_err_up ) ] )
+
+    y_min = 0.5 * min(
+        [ val - abs(err) for val, err in zip( spec.kt1.norm_values, spec.kt1.norm_err_down ) ] +
+        [ val - abs(err) for val, err in zip( spec.kg1.norm_values, spec.kg1.norm_err_down ) ] +
+        [ val - abs(err) for val, err in zip( spec.data.norm_values, spec.data.norm_err_down ) ] )
+
     kt1.SetMaximum( y_max )
-    kt1.SetMinimum( -1.0 )
+    kt1.SetMinimum( max( y_min, 0.001 ) )
 
     # ======================================
     # Some information text boxes
@@ -173,7 +185,7 @@ def Draw_both_normalized_spectra( spec ):
     tl.DrawLatex( lx+nc, ly-nl, '{0:.2f} fb'.format(kg1.Integral()) )
     tl.SetTextColor(1)
     tl.DrawLatex( lx, ly-2*nl, 'Data:' )
-    tl.DrawLatex( lx+nc, ly-2*nl, '{0:.2f} fb'.format(sum(spec.data.values)) )
+    tl.DrawLatex( lx+nc, ly-2*nl, '{0:.2f} fb'.format(sum(spec.data.norm_values)) )
 
 
     spec.c1.Print( 'Both_normalized_spectra.pdf', '.pdf' )
