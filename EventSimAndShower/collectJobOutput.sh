@@ -41,8 +41,8 @@ for cfgdir in cfg* ; do
     if [ $TESTMODE = "True" ]; then
         echo "Would now do: mv $cfgdir/*.root $COLLECTIONDIR/"
     else
-        echo "SCRIPT IS DEACTIVATED"
-        # mv $cfgdir/*.root $COLLECTIONDIR/
+        echo "DOING: mv $cfgdir/*.root $COLLECTIONDIR/"
+        mv $cfgdir/*.root $COLLECTIONDIR/
     fi
 done
 
