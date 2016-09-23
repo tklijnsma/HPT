@@ -4,13 +4,10 @@ sys.path.append('src')
 from Spectrum import Spectrum
 from Spectrum import Spectra_container
 
-from Plot_kgkt_spectra import Draw_both_unnormalized_spectra
-from Plot_kgkt_spectra import Draw_both_normalized_spectra
-
-from Quadratic_fit import Quadratic_fit
-from Quadratic_fit import Plot_quadratic_fit
-
+import Plot_kgkt_spectra
 import kappa_elips
+import ErrorScaling
+import Quadratic_fit
 
 import ROOT
 import argparse
@@ -79,12 +76,15 @@ def main():
     spec = Spectra_container( analysis_level, cuts )
 
     spec.Set_data_spectrum(
-        bins = [ 0, 15, 26, 43, 72, 125, 200 ],
+        bins     = [ 0, 15, 26, 43, 72, 125, 200 ],
         values   = [ 9.0, 2.0, 3.4, 6.2, 4.6, 2.6, 0.7 ],
         err_up   = [ 6.4, 4.9, 4.8, 3.7, 2.4, 1.0, 0.5 ],
         err_down = [ -6.2, -5.5, -4.6, -3.5, -2.7, -1.0, -0.4 ],
-        max_pt = 300.0,
+        max_pt   = 300.0,
         )
+
+    # Read the root file to get contributions from VBF, ...
+    spec.Get_other_channel_contributions()
 
     if not args.redraw and os.path.isfile('H_kt1.pickle') and os.path.isfile('H_kg1.pickle'):
         # Load pickle files with histograms in there
@@ -96,24 +96,28 @@ def main():
         spec.kg1.Set_values_from_root_file( kg1_root_file, Verbose=True )
         spec.kt1.Set_values_from_root_file( kt1_root_file, Verbose=True )
 
-    spec.kg1.Print_H()
-    spec.kt1.Print_H()
-
-    Draw_both_unnormalized_spectra( spec )
-    Draw_both_normalized_spectra( spec )
-
-    Quadratic_fit( spec )
-    Plot_quadratic_fit( spec )
-
-    print spec.kt1.unnormalized_values
-    print spec.kg1.unnormalized_values
+    # spec.kg1.Print_H()
+    # spec.kt1.Print_H()
 
 
+    spec.Quadratic_fit()
 
     print '\n' + '#'*70
     print 'Kappa plot\n'
-
     spec.kappa_plot()
+
+
+    print '\n' + '#'*70
+    print 'Making plots\n'
+
+    # spec.Plot_quadratic_fit()
+
+    print 'Plotting the different spectra'
+    spec.Draw_both_normalized_spectra()
+
+    print '\n' + '#'*70
+    print 'Error scaling\n'
+    spec.ErrorScaling()
 
 
 
