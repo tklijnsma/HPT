@@ -29,19 +29,18 @@ else
     echo "    Setting up fresh flashgg from $GITREPO"
     git cms-init
     git clone $GITREPO
-    # git checkout 2d121446d4d7972ac0d0c43de03f11a0b8afe4c9
-    git checkout 63f87406b0c68300d3b9576e1e77ba1ddd89cf72
     RECOMPILE=true
 fi
-
-# Setup script
-echo "Running setup script"
-source flashgg/setup.sh
 
 # Copy in necessary files
 cp ../../Scripts/DummyVertexProducer.cc flashgg/MicroAOD/plugins/
 
 if [ $RECOMPILE = true ]; then
+
+    # Setup script
+    echo "Running setup script"
+    source flashgg/setup.sh
+    
     # Compile
     echo "Compiling"
     scram b -j 9
