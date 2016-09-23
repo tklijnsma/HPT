@@ -9,7 +9,7 @@ STARTDIR="$(pwd)"
 SHOULDBERUNDIR="$(basename "$(pwd)")"
 if [ "$SHOULDBERUNDIR" != "Run_gridpacks_and_shower" ]; then
     echo "Error: Not executed from the proper directory"
-    echo "       Current directory shoulb be Run_gridpacks_and_shower, but is $SHOULDBERUNDIR"
+    echo "       Current directory should be Run_gridpacks_and_shower, but is $SHOULDBERUNDIR"
     return 1
 fi
 
